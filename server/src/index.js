@@ -71,9 +71,9 @@ server.post('/login', async (req, res) => {
         const user = fakeDB.find(user => user.email === email);
         if (!user) throw new Error("User does not exist");
         // compare the hashed password to the one in the 'db'
-        const valid = await compare(password, user.password);
+        const valid = await compare(password, user.hashedPassword);
         if (!valid) throw new Error("Password not correct");
-        //  create refresh and access tokens 
+        
         const accesstoken = createAccessToken(user.id);
         const refreshtoken = createRefreshToken(user.id);
         // put the refreshtoke in the 'database'
@@ -103,7 +103,7 @@ server.post('/protected', async (req, res) => {
         const userId = isAuth(req);
         if (userId !== null) {
            res.send({
-               data: 'this is secret data'
+               data: 'this is secret data'  
            }) 
         }
     } catch (err) {
